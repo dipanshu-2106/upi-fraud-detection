@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+alert_env.ps1
+data/
+models/
+.streamlit/secrets.toml
