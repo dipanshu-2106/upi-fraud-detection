@@ -22,6 +22,12 @@ ROW_STYLE = {
 }
 BUCKETS = {"15 seconds": 15, "30 seconds": 30, "1 minute": 60}
 st.set_page_config(page_title="UPI Fraud Detection", page_icon="\U0001F6E1\uFE0F", layout="wide")
+from bootstrap import ensure_running
+@st.cache_resource(show_spinner="Starting the fraud detection engine (first start takes about a minute)...")
+def start_backend():
+    """Start data, model and API inside this process when no API is running."""
+    return ensure_running(API_URL)
+start_backend()
 CSS = """
 <style>
 .hero {padding: 1.3rem 1.6rem; border-radius: 16px; margin-bottom: 1rem; color: white;
