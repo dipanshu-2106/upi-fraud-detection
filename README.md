@@ -1,6 +1,6 @@
 # UPI Fraud Detection
 Real-time fraud detection for UPI payments. Three anomaly detection methods (IQR, Isolation Forest, rolling z-score) and an ensemble are compared on 10,000 synthetic transactions. The best model is served through a FastAPI service and a live Streamlit dashboard with risk levels, filters, trend charts and alerts.
-**Live demo:** coming soon (Render link will be added here)
+**Live demo:** [https://upi-fraud-detector-2026.streamlit.app](https://upi-fraud-detector-2026.streamlit.app)
 > All data in this project is synthetic. Please read the "Limitations" section.
 ## Problem
 UPI payments are instant and irreversible, so fraud has to be caught while the payment happens. Fraud usually looks different from a user's own normal behaviour: a very large amount, a late-night payment, a new device, a new city, or many transfers in a few seconds. This project detects such behaviour without using fraud labels for training.
@@ -88,14 +88,11 @@ Every HIGH risk transaction is saved in `data/alerts.log`, shown in the Alerts t
 | Telegram | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` |
 | Email (SMTP) | `SMTP_USER`, `SMTP_PASSWORD`, `ALERT_EMAIL_TO` |
 | SMS | `ALERT_PHONE_TO`, `FAST2SMS_API_KEY` |
-## Deploy on Render
-Two web services are created from the same repository.
-| | API | Dashboard |
-|---|---|---|
-| Build command | `pip install -r requirements.txt && python run_all.py` | `pip install -r requirements.txt && python run_all.py` |
-| Start command | `uvicorn api.main:app --host 0.0.0.0 --port $PORT` | `streamlit run app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true` |
-| Environment | `DEMO_SIMULATOR=on` | `API_URL=<URL of the API service>` |
-Free instances sleep after 15 minutes without traffic, so the first request after a break can take a minute.
+## Deploy on Streamlit Community Cloud
+The dashboard is deployed from this GitHub repository. On start it creates the data and the model (`run_all` steps), starts the FastAPI service inside the same process, and the API generates its own demo traffic (`DEMO_SIMULATOR=on`).
+- Main file: `app.py`, Python 3.12
+- `bootstrap.py` starts the API in a background thread when no API is running
+- Free apps sleep after about 12 hours without traffic, so the first visit after a break can take a minute
 ## Project structure
 ```
 api/            FastAPI service (main.py, notifier.py, demo_sim.py)
